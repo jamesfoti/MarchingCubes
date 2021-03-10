@@ -31,11 +31,10 @@ public class Chunk : MonoBehaviour {
                     Vector3 centerOffset = new Vector3(width * .5f, height * .5f, depth * .5f);
                     Vector3 bottomLeftCorner = new Vector3(x, y, z) - centerOffset;
                     
-
                     float[] cubeDensities = new float[8];
                     for (int i = 0; i < 8; i++) {
                         Vector3 corner = bottomLeftCorner + CubeData.corners[i];
-                        cubeDensities[i] = SampleNoise(corner.x, corner.y, corner.z);
+                        cubeDensities[i] = GetDensity(corner.x, corner.y, corner.z);
                         Debug.Log(cubeDensities[i]);
                         densities.Add(cubeDensities[i]);
                         traversedCorners.Add(corner);
@@ -47,8 +46,24 @@ public class Chunk : MonoBehaviour {
         UpdateMesh();
     }
 
-    public float SampleNoise(float x, float y, float z) {
-        return (float)noise.Evaluate(x, y, z) + y ;   
+    public float GetDensity(float x, float y, float z) {
+        // Get a terrain height using regular old Perlin noise.
+        float thisHeight = (float)height * Mathf.PerlinNoise((float)x / 16f * 1.5f + 0.001f, (float)z / 16f * 1.5f + 0.001f);
+
+        float point = 0;
+        // We're only interested when point is within 0.5f of terrain surface. More than 0.5f less and it is just considered
+        // solid terrain, more than 0.5f above and it is just air. Within that range, however, we want the exact value.
+        if (y <= thisHeight - 0.5f)
+            point = 0f;
+        else if (y > thisHeight + 0.5f)
+            point = 1f;
+        else if (y > thisHeight)
+            point = (float)y - thisHeight;
+        else
+            point = thisHeight - (float)y;
+
+        // Set the value of this point in the terrainMap.
+        return point;
     }
 
     void March(Vector3 position, float[] cubeDensities) {
