@@ -15,7 +15,7 @@ public static class CubeData {
 	private static Vector3 v6 = new Vector3(1, 0, 1);
 	private static Vector3 v7 = new Vector3(1, 1, 1);
 	private static Vector3 v8 = new Vector3(0, 1, 1);
-	public static Vector3[] corners = {v8, v7, v6, v5, v4, v3, v2, v1};
+	public static Vector3[] corners = {v1, v2, v3, v4, v5, v6, v7, v8};
 
 	// Edges
 	public static Vector3[,] edges = {
@@ -296,7 +296,6 @@ public static class CubeData {
 		int[] edgeList = new int[16];
 		for (int i = 0; i < 16; i++) {
 			edgeList[i] = triangleTable[index,i];
-			Debug.Log(edgeList[i]);
 		}
 		return edgeList;
 	}
@@ -304,7 +303,7 @@ public static class CubeData {
 	public static int GetConfigIndex(float[] cubeDensities, float surfaceLevel) {		
 		int configIndex = 0;
 		for (int i = 0; i < 8; i++) {
-			if (cubeDensities[i] < surfaceLevel) {
+			if (cubeDensities[i] > surfaceLevel) {
 				configIndex |= 1 << i;
 			}
 		}
