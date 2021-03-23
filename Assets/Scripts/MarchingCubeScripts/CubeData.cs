@@ -9,10 +9,10 @@ public static class CubeData {
 	// Corners
 	private static Vector3 v1 = new Vector3(0, 0, 0);
 	private static Vector3 v2 = new Vector3(1, 0, 0);
-	private static Vector3 v3 = new Vector3(1, 1, 0);
-	private static Vector3 v4 = new Vector3(0, 1, 0);
-	private static Vector3 v5 = new Vector3(0, 0, 1);
-	private static Vector3 v6 = new Vector3(1, 0, 1);
+	private static Vector3 v3 = new Vector3(1, 0, 1);
+	private static Vector3 v4 = new Vector3(0, 0, 1);
+	private static Vector3 v5 = new Vector3(0, 1, 0);
+	private static Vector3 v6 = new Vector3(1, 1, 0);
 	private static Vector3 v7 = new Vector3(1, 1, 1);
 	private static Vector3 v8 = new Vector3(0, 1, 1);
 	public static Vector3[] corners = {v1, v2, v3, v4, v5, v6, v7, v8};
@@ -22,11 +22,11 @@ public static class CubeData {
 		{ v1, v2 },
 		{ v2, v3 },
 		{ v3, v4 },
-		{ v1, v4 },
+		{ v4, v1 },
 		{ v5, v6 },
 		{ v6, v7 },
 		{ v7, v8 },
-		{ v5, v8 },
+		{ v8, v5 },
 		{ v1, v5 },
 		{ v2, v6 },
 		{ v3, v7 },
@@ -338,14 +338,16 @@ public static class CubeData {
 	public static int GetConfigIndex(float[] cubeDensities, float surfaceLevel) {		
 		int configIndex = 0;
 
-		if (cubeDensities[0] > surfaceLevel) configIndex += 1;
-		if (cubeDensities[1] > surfaceLevel) configIndex += 2;
-		if (cubeDensities[2] > surfaceLevel) configIndex += 4;
-		if (cubeDensities[3] > surfaceLevel) configIndex += 8;
-		if (cubeDensities[4] > surfaceLevel) configIndex += 16;
-		if (cubeDensities[5] > surfaceLevel) configIndex += 32;
-		if (cubeDensities[6] > surfaceLevel) configIndex += 64;
-		if (cubeDensities[7] > surfaceLevel) configIndex += 128;
+		// cubeDensities[8] = {v1, v2, v3, v4, v5, v6, v7, v8}
+		// Binary format = {v8, v7, v6, v5, v4, v3, v2, v1}
+		if (cubeDensities[0] < surfaceLevel) configIndex += 1;   // 0000 0001 = 1
+		if (cubeDensities[1] < surfaceLevel) configIndex += 2;   // 0000 0010 = 2
+		if (cubeDensities[2] < surfaceLevel) configIndex += 4;   // 0000 0100 = 4
+		if (cubeDensities[3] < surfaceLevel) configIndex += 8;   // 0000 1000 = 8
+		if (cubeDensities[4] < surfaceLevel) configIndex += 16;  // 0001 0000 = 16
+		if (cubeDensities[5] < surfaceLevel) configIndex += 32;  // 0010 0000 = 32
+		if (cubeDensities[6] < surfaceLevel) configIndex += 64;  // 0100 0000 = 64
+		if (cubeDensities[7] < surfaceLevel) configIndex += 128; // 1000 0000 = 128
 
 		return configIndex;
 	}

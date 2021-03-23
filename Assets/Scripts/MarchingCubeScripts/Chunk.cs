@@ -10,8 +10,8 @@ public class Chunk : MonoBehaviour {
     public float height;
     public float depth;
     public float surfaceLevel;
-
     private Vector3 centerOffset;
+
     private MeshFilter meshFilter;
     public List<Vector3> vertices = new List<Vector3>();
     public List<int> triangles = new List<int>();
@@ -47,7 +47,7 @@ public class Chunk : MonoBehaviour {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 for (int z = 0; z < depth; z++) {
-                    Vector3 bottomLeftCorner = new Vector3(x, y, z) - centerOffset;
+                    Vector3 bottomLeftCorner = new Vector3(x, y, z) - centerOffset + origin;
                     Vector3[] corners = new Vector3[8];
                     float[] densities = new float[8];
 
@@ -55,11 +55,11 @@ public class Chunk : MonoBehaviour {
                         corners[i] = bottomLeftCorner + CubeData.corners[i];
 
                         // This is done b/c noise functions don't like whole numbers.
-                        float nx = (corners[i].x / width) * 4;
-                        float ny = (corners[i].y / height) * 4;
-                        float nz = (corners[i].z / depth) * 4;
+                        float nx = (corners[i].x / width) * 1f;
+                        float ny = (corners[i].y / height) * 1f;
+                        float nz = (corners[i].z / depth) * 1f;
 
-                        densities[i] = SetRectangularShapeData(corners[i].x, corners[i].y, corners[i].z);
+                        densities[i] = Noise.PerlinNoise3D(nx, ny, nz);
                         Debug.Log(densities[i]);
 					}
 
@@ -72,27 +72,20 @@ public class Chunk : MonoBehaviour {
 
     private float SetRectangularShapeData(float x, float y, float z) {
         // this function is used for testing purposes to make sure Marching Cube algo works.
-        float xMin = -width * .5f;
-        float xMax = width * .5f;
+        Vector3 minCoord = new Vector3(-width * .5f, -height * .5f, -depth * .5f) + origin;
+        Vector3 maxCoord = new Vector3(width * .5f, height * .5f, depth * .5f) + origin;
 
-        float yMin = -height * .5f;
-        float yMax = height * .5f;
+        if (x == minCoord.x) return 1;
+        else if (x == maxCoord.x) return 1;
 
-        float zMin = -depth * .5f;
-        float zMax = depth * .5f;
+        else if (y == minCoord.y) return 1;
+        else if (y == maxCoord.y) return 1;
 
-        if (x == xMin) return 1;
-        else if (x == xMax) return 1;
-
-        else if (y == yMin) return 1;
-        else if (y == yMax) return 1;
-
-        else if (z == zMin) return 1;
-        else if (z == zMax) return 1;
+        else if (z == minCoord.z) return 1;
+        else if (z == maxCoord.z) return 1;
 
         else return 0;
     }
-
 
     public void CreateMesh() {
         ClearMeshData();
@@ -113,5 +106,16 @@ public class Chunk : MonoBehaviour {
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();
         meshFilter.mesh = mesh;
-    } 
+    }
+
+	private void OnGizmosSelected() {
+		for (int i = 0; i < voxels.Count; i++) {
+            Voxel3D currVoxel = voxels[i];
+            for (int j = 0; j < currVoxel.corners.Length; j++) {
+                Color color = Color.Lerp(Color.green, Color.white, currVoxel.densities[j]);
+                Gizmos.color = color;
+                Gizmos.DrawSphere(voxels[i].corners[j], .1f);
+			}
+		}
+	}
 }

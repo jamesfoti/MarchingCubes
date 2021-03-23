@@ -9,10 +9,6 @@ public static class Noise {
 
     public static float PerlinNoise3D(float x, float y, float z) {
         // Taken from Omar Santiago on https://www.youtube.com/watch?v=JdeyNbDACV0&t=1587s
-        x += .1f;
-        y += .1f;
-        z += .1f;
-
         float AB = Mathf.PerlinNoise(x, y);
         float BC = Mathf.PerlinNoise(y, z);
         float AC = Mathf.PerlinNoise(x, z);
