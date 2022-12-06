@@ -3,37 +3,56 @@ using UnityEngine;
 
 public class Voxel
 {
-	public float[] CornerDensities { get; set; } = new float[8];
-	public Tuple<Vector3, Vector3>[] Edges { get; set; } = new Tuple<Vector3, Vector3>[12];
-
-	private readonly Vector3[] _cornerVertices = new Vector3[8];
+	public VoxelVertex[] VoxelVertex { get; set; } = new VoxelVertex[8];
+	public VoxelEdge[] VoxelEdges { get; set; } = new VoxelEdge[12];
 
 	public Voxel(Vector3 bottomLeftPosition, float size)
 	{
-		_cornerVertices[0] = bottomLeftPosition;
-		_cornerVertices[1] = new Vector3(_cornerVertices[0].x + size, _cornerVertices[0].y, _cornerVertices[0].z);
-		_cornerVertices[2] = new Vector3(_cornerVertices[0].x + size, _cornerVertices[0].y + size, _cornerVertices[0].z);
-		_cornerVertices[3] = new Vector3(_cornerVertices[0].x, _cornerVertices[0].y + size, _cornerVertices[0].z);
+		VoxelVertex[0] = new VoxelVertex(bottomLeftPosition, 0f);
+		VoxelVertex[1] = new VoxelVertex(new Vector3(bottomLeftPosition.x + size, bottomLeftPosition.y, bottomLeftPosition.z));
+		VoxelVertex[2] = new VoxelVertex(new Vector3(bottomLeftPosition.x + size, bottomLeftPosition.y + size, bottomLeftPosition.z));
+		VoxelVertex[3] = new VoxelVertex(new Vector3(bottomLeftPosition.x, bottomLeftPosition.y + size, bottomLeftPosition.z));
+		VoxelVertex[4] = new VoxelVertex(new Vector3(bottomLeftPosition.x, bottomLeftPosition.y, bottomLeftPosition.z + size));
+		VoxelVertex[5] = new VoxelVertex(new Vector3(bottomLeftPosition.x + size, bottomLeftPosition.y, bottomLeftPosition.z + size));
+		VoxelVertex[6] = new VoxelVertex(new Vector3(bottomLeftPosition.x + size, bottomLeftPosition.y + size, bottomLeftPosition.z + size));
+		VoxelVertex[7] = new VoxelVertex(new Vector3(bottomLeftPosition.x, bottomLeftPosition.y + size, bottomLeftPosition.z + size));
 
-		_cornerVertices[4] = new Vector3(_cornerVertices[0].x, _cornerVertices[0].y, _cornerVertices[0].z + size);
-		_cornerVertices[5] = new Vector3(_cornerVertices[0].x + size, _cornerVertices[0].y, _cornerVertices[0].z + size);
-		_cornerVertices[6] = new Vector3(_cornerVertices[0].x + size, _cornerVertices[0].y + size, _cornerVertices[0].z + size);
-		_cornerVertices[7] = new Vector3(_cornerVertices[0].x, _cornerVertices[0].y + size, _cornerVertices[0].z + size);
+		VoxelEdges[0] = new VoxelEdge(VoxelVertex[0], VoxelVertex[1]);
+		VoxelEdges[1] = new VoxelEdge(VoxelVertex[1], VoxelVertex[2]);
+		VoxelEdges[2] = new VoxelEdge(VoxelVertex[2], VoxelVertex[3]);
+		VoxelEdges[3] = new VoxelEdge(VoxelVertex[3], VoxelVertex[0]);
+		VoxelEdges[4] = new VoxelEdge(VoxelVertex[4], VoxelVertex[5]);
+		VoxelEdges[5] = new VoxelEdge(VoxelVertex[5], VoxelVertex[6]);
+		VoxelEdges[6] = new VoxelEdge(VoxelVertex[6], VoxelVertex[7]);
+		VoxelEdges[7] = new VoxelEdge(VoxelVertex[7], VoxelVertex[4]);
+		VoxelEdges[8] = new VoxelEdge(VoxelVertex[4], VoxelVertex[0]);
+		VoxelEdges[9] = new VoxelEdge(VoxelVertex[5], VoxelVertex[1]);
+		VoxelEdges[10] = new VoxelEdge(VoxelVertex[6], VoxelVertex[2]);
+		VoxelEdges[11] = new VoxelEdge(VoxelVertex[7], VoxelVertex[3]);
+	}
+}
 
-		Edges[0] = Tuple.Create(_cornerVertices[0], _cornerVertices[1]);
-		Edges[1] = Tuple.Create(_cornerVertices[1], _cornerVertices[2]);
-		Edges[2] = Tuple.Create(_cornerVertices[2], _cornerVertices[3]);
-		Edges[3] = Tuple.Create(_cornerVertices[3], _cornerVertices[0]);
+public struct VoxelVertex
+{
+	public Vector3 Position { get; set; }
+	public float Density { get; set; }
 
-		Edges[4] = Tuple.Create(_cornerVertices[4], _cornerVertices[5]);
-		Edges[5] = Tuple.Create(_cornerVertices[5], _cornerVertices[6]);
-		Edges[6] = Tuple.Create(_cornerVertices[6], _cornerVertices[7]);
-		Edges[7] = Tuple.Create(_cornerVertices[7], _cornerVertices[4]);
+	public VoxelVertex(Vector3 position, float density = 0f)
+	{
+		Position = position;
+		Density = density;
+	}
+}
 
-		Edges[8] = Tuple.Create(_cornerVertices[4], _cornerVertices[0]);
-		Edges[9] = Tuple.Create(_cornerVertices[5], _cornerVertices[1]);
-		Edges[10] = Tuple.Create(_cornerVertices[6], _cornerVertices[2]);
-		Edges[11] = Tuple.Create(_cornerVertices[7], _cornerVertices[3]);
+public struct VoxelEdge
+{
+	public VoxelVertex Start { get; set; }
+	public VoxelVertex End { get; set; }
+
+	public VoxelEdge(VoxelVertex start, VoxelVertex end)
+	{
+		Start = start;
+		End = end;
 	}
 }
 

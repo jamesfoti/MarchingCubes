@@ -286,9 +286,9 @@ public static class MarchingCubesHelper
 				int edgeIndexB = edgeIndices[i + 1];
 				int edgeIndexC = edgeIndices[i + 2];
 
-				Vector3 vertexA = (voxel.Edges[edgeIndexA].Item1 + voxel.Edges[edgeIndexA].Item2) / 2f;
-				Vector3 vertexB = (voxel.Edges[edgeIndexB].Item1 + voxel.Edges[edgeIndexB].Item2) / 2f;
-				Vector3 vertexC = (voxel.Edges[edgeIndexC].Item1 + voxel.Edges[edgeIndexC].Item2) / 2f;
+				Vector3 vertexA = (voxel.VoxelEdges[edgeIndexA].Start.Position + voxel.VoxelEdges[edgeIndexA].End.Position) / 2f;
+				Vector3 vertexB = (voxel.VoxelEdges[edgeIndexB].Start.Position + voxel.VoxelEdges[edgeIndexB].End.Position) / 2f;
+				Vector3 vertexC = (voxel.VoxelEdges[edgeIndexC].Start.Position + voxel.VoxelEdges[edgeIndexC].End.Position) / 2f;
 
 				int vertexIndex = vertices.Count;
 				vertices.Add(vertexA);
@@ -312,42 +312,42 @@ public static class MarchingCubesHelper
 	{
 		int result = 0;
 
-		if (voxel.CornerDensities[0] > isoLevel)
+		if (voxel.VoxelVertex[0].Density > isoLevel)
 		{
 			result += 1;
 		}
 
-		if (voxel.CornerDensities[1] > isoLevel)
+		if (voxel.VoxelVertex[1].Density > isoLevel)
 		{
 			result += 2;
 		}
 
-		if (voxel.CornerDensities[2] > isoLevel)
+		if (voxel.VoxelVertex[2].Density > isoLevel)
 		{
 			result += 4;
 		}
 
-		if (voxel.CornerDensities[3] > isoLevel)
+		if (voxel.VoxelVertex[3].Density > isoLevel)
 		{
 			result += 8;
 		}
 
-		if (voxel.CornerDensities[4] > isoLevel)
+		if (voxel.VoxelVertex[4].Density > isoLevel)
 		{
 			result += 16;
 		}
 
-		if (voxel.CornerDensities[5] > isoLevel)
+		if (voxel.VoxelVertex[5].Density > isoLevel)
 		{
 			result += 32;
 		}
 
-		if (voxel.CornerDensities[6] > isoLevel)
+		if (voxel.VoxelVertex[6].Density > isoLevel)
 		{
 			result += 64;
 		}
 
-		if (voxel.CornerDensities[7] > isoLevel)
+		if (voxel.VoxelVertex[7].Density > isoLevel)
 		{
 			result += 128;
 		}

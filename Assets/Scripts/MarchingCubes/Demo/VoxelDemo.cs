@@ -60,28 +60,28 @@ public class VoxelDemo : MonoBehaviour
 				switch (hit.transform.name)
 				{
 					case "v1":
-						_voxel.CornerDensities[0] = densityValueToUse;
+						_voxel.VoxelVertex[0].Density = densityValueToUse;
 						break;
 					case "v2":
-						_voxel.CornerDensities[1] = densityValueToUse;
+						_voxel.VoxelVertex[1].Density = densityValueToUse;
 						break;
 					case "v3":
-						_voxel.CornerDensities[2] = densityValueToUse;
+						_voxel.VoxelVertex[2].Density = densityValueToUse;
 						break;
 					case "v4":
-						_voxel.CornerDensities[3] = densityValueToUse;
+						_voxel.VoxelVertex[3].Density = densityValueToUse;
 						break;
 					case "v5":
-						_voxel.CornerDensities[4] = densityValueToUse;
+						_voxel.VoxelVertex[4].Density = densityValueToUse;
 						break;
 					case "v6":
-						_voxel.CornerDensities[5] = densityValueToUse;
+						_voxel.VoxelVertex[5].Density = densityValueToUse;
 						break;
 					case "v7":
-						_voxel.CornerDensities[6] = densityValueToUse;
+						_voxel.VoxelVertex[6].Density = densityValueToUse;
 						break;
 					case "v8":
-						_voxel.CornerDensities[7] = densityValueToUse;
+						_voxel.VoxelVertex[7].Density = densityValueToUse;
 						break;
 				}
 
@@ -101,7 +101,6 @@ public class VoxelDemo : MonoBehaviour
 
 		foreach (Vector3 vertex in mesh.vertices)
 		{
-			Debug.Log(vertex);
 			Gizmos.color = Color.red;
 			Gizmos.DrawSphere(vertex, .05f);
 		}
