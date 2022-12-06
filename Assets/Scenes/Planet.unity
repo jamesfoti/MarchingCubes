@@ -236,12 +236,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5871947971bb11f4d870ccca1d2797d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainData:
+  planetTerrainData:
     isoLevel: 0
     chunkResolution: 1
     chunkSize: 3
-    radiusInChunks: 1
-    realWorldRadius: 0
+    radiusInChunks: 2
     center: {x: 0, y: 0, z: 0}
   chunkPrefab: {fileID: 3406029699930358095, guid: ef429d405a7edb5469e40782b505d700, type: 3}
 --- !u!4 &899497117
