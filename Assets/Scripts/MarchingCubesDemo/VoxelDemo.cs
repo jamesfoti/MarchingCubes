@@ -60,28 +60,28 @@ public class VoxelDemo : MonoBehaviour
 				switch (hit.transform.name)
 				{
 					case "v1":
-						_voxel.VoxelVertex[0].Density = densityValueToUse;
+						_voxel.Vertices[0].Density = densityValueToUse;
 						break;
 					case "v2":
-						_voxel.VoxelVertex[1].Density = densityValueToUse;
+						_voxel.Vertices[1].Density = densityValueToUse;
 						break;
 					case "v3":
-						_voxel.VoxelVertex[2].Density = densityValueToUse;
+						_voxel.Vertices[2].Density = densityValueToUse;
 						break;
 					case "v4":
-						_voxel.VoxelVertex[3].Density = densityValueToUse;
+						_voxel.Vertices[3].Density = densityValueToUse;
 						break;
 					case "v5":
-						_voxel.VoxelVertex[4].Density = densityValueToUse;
+						_voxel.Vertices[4].Density = densityValueToUse;
 						break;
 					case "v6":
-						_voxel.VoxelVertex[5].Density = densityValueToUse;
+						_voxel.Vertices[5].Density = densityValueToUse;
 						break;
 					case "v7":
-						_voxel.VoxelVertex[6].Density = densityValueToUse;
+						_voxel.Vertices[6].Density = densityValueToUse;
 						break;
 					case "v8":
-						_voxel.VoxelVertex[7].Density = densityValueToUse;
+						_voxel.Vertices[7].Density = densityValueToUse;
 						break;
 				}
 

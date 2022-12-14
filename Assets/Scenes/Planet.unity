@@ -252,10 +252,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TerrainData:
-    isoLevel: 0
+    isoLevel: 0.29
     chunkResolution: 1
     chunkSize: 3
     radiusInChunks: 3
+    noiseScale: 0.296
     center: {x: 0, y: 0, z: 0}
   chunkPrefab: {fileID: 3406029699930358095, guid: ef429d405a7edb5469e40782b505d700, type: 3}
 --- !u!4 &899497117

@@ -16,19 +16,19 @@ public class OrbitalCamera : MonoBehaviour
 
     private void ReadInput()
 	{
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
+        {
+            _rotationDirection.x = Input.GetAxis("Mouse X");
+            _rotationDirection.y = Input.GetAxis("Mouse Y");
+        }
+
+        if (Input.GetMouseButton(2))
         {
             _movementDirection.x = -Input.GetAxis("Mouse X");
             _movementDirection.y = -Input.GetAxis("Mouse Y");
         }
 
         _movementDirection.z = Input.GetAxis("Mouse ScrollWheel");
-
-        if (Input.GetMouseButton(1))
-        {
-            _rotationDirection.x = Input.GetAxis("Mouse X");
-            _rotationDirection.y = Input.GetAxis("Mouse Y");
-        }
     }
 
     private void ApplyInput()

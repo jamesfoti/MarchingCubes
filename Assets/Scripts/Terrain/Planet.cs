@@ -35,4 +35,25 @@ public class Planet : MonoBehaviour
 			}
 		}
 	}
+
+	public void DestroyPlanet()
+	{
+		foreach (KeyValuePair<Vector3, Chunk> entry in _chunks)
+		{
+			Chunk chunk = entry.Value;
+
+			if (Application.isPlaying)
+			{
+				chunk.ClearMesh();
+				Destroy(chunk.gameObject);
+			}
+			else
+			{
+				chunk.ClearSharedMesh();
+				DestroyImmediate(chunk.gameObject);
+			}
+		}
+
+		_chunks.Clear();
+	}
 }

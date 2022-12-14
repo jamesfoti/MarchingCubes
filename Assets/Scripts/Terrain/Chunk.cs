@@ -8,7 +8,6 @@ public class Chunk : MonoBehaviour
 	public Vector3 CenterPosition { get; private set; } = new Vector3();
 
 	private readonly List<Voxel> _voxels = new List<Voxel>();
-
 	private Planet _parentPlanet;
 
 	public void Initialize(Vector3 bottomLeftPosition, Planet parentPlanet)
@@ -36,63 +35,49 @@ public class Chunk : MonoBehaviour
 
 	public void CreateMesh()
 	{
-		SetDensities();
+		SetVoxelDensities();
 		Mesh mesh = MarchingCubesHelper.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.TerrainData.isoLevel);
 		GetComponent<MeshFilter>().mesh = mesh;
 	}
 
-	public void SetDensities()
+	public void ClearMesh()
+	{
+		Mesh mesh = GetComponent<MeshFilter>().mesh;
+		mesh.Clear();
+		GetComponent<MeshFilter>().mesh = mesh;
+	}
+
+	public void ClearSharedMesh()
+	{
+		Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
+		mesh.Clear();
+		GetComponent<MeshFilter>().sharedMesh = mesh;
+	}
+
+	private void SetVoxelDensities()
 	{
 		foreach (Voxel voxel in _voxels)
 		{
-			voxel.VoxelVertex[0].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[0].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize); 
-			voxel.VoxelVertex[1].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[1].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize);
-			voxel.VoxelVertex[2].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[2].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize);
-			voxel.VoxelVertex[3].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[3].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize);
-			voxel.VoxelVertex[4].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[4].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize);
-			voxel.VoxelVertex[5].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[5].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize);
-			voxel.VoxelVertex[6].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[6].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize);
-			voxel.VoxelVertex[7].Density = NoiseHelper.SdfSphere(voxel.VoxelVertex[7].Position, _parentPlanet.TerrainData.radiusInChunks * _parentPlanet.TerrainData.chunkSize);
+			for (int i = 0; i < voxel.Vertices.Length; i++)
+			{
+				voxel.Vertices[i].Density = NoiseHelper.PerlinNoise3D(voxel.Vertices[i].Position.x * _parentPlanet.TerrainData.noiseScale, voxel.Vertices[i].Position.y * _parentPlanet.TerrainData.noiseScale, voxel.Vertices[i].Position.z * _parentPlanet.TerrainData.noiseScale);
+			}
 		}
 	}
 
 	private void OnDrawGizmosSelected()
 	{
-		Gizmos.color = Color.yellow;
-		Gizmos.DrawSphere(CenterPosition, .1f);
-		Handles.Label(CenterPosition, "Chunk Origin \n Position");
-
-		Gizmos.color = Color.red;
-		Gizmos.DrawSphere(BottomLeftPosition, .1f);
-		Handles.Label(BottomLeftPosition, "Chunk Bottom \n Left Position");
-
 		foreach (Voxel voxel in _voxels)
 		{
-			Gizmos.color = Color.green;
-			Gizmos.DrawSphere(voxel.VoxelVertex[0].Position, .05f);
-			Gizmos.DrawSphere(voxel.VoxelVertex[1].Position, .05f);
-			Gizmos.DrawSphere(voxel.VoxelVertex[2].Position, .05f);
-			Gizmos.DrawSphere(voxel.VoxelVertex[3].Position, .05f);
-			Gizmos.DrawSphere(voxel.VoxelVertex[4].Position, .05f);
-			Gizmos.DrawSphere(voxel.VoxelVertex[5].Position, .05f);
-			Gizmos.DrawSphere(voxel.VoxelVertex[6].Position, .05f);
-			Gizmos.DrawSphere(voxel.VoxelVertex[7].Position, .05f);
+			for (int i = 0; i < voxel.Vertices.Length; i++)
+			{
+				Gizmos.color = Color.green;
+				Gizmos.DrawSphere(voxel.Vertices[i].Position, .05f);
 
-			/* Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.d1);
-			Gizmos.DrawWireSphere(voxel.v1, .2f);
-			Handles.Label(voxel.v1, voxel.d1.ToString());
-
-			Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.d2);
-			Gizmos.DrawWireSphere(voxel.v2, .2f);
-			Handles.Label(voxel.v2, voxel.d2.ToString());
-
-			Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.d3);
-			Gizmos.DrawWireSphere(voxel.v3, .2f);
-			Handles.Label(voxel.v3, voxel.d3.ToString());
-
-			Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.d4);
-			Gizmos.DrawWireSphere(voxel.v4, .2f);
-			Handles.Label(voxel.v4, voxel.d4.ToString()); */
+				Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.Vertices[i].Density);
+				Gizmos.DrawWireSphere(voxel.Vertices[i].Position, .2f);
+				Handles.Label(voxel.Vertices[i].Position, voxel.Vertices[i].Density.ToString());
+			}
 		}
 	}
 }
