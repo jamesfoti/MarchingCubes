@@ -4,25 +4,21 @@ using UnityEngine;
 
 public static class NoiseHelper
 {
-	public static float SdfSphere(Vector3 position, float radius)
+	public static float SdfProceduralPlanet(Vector3 position, float radius, float frequency, float amplitude, int octaves)
 	{
-		float result = position.magnitude - radius;
-		return result;
-	}
+		float result = 0f;
 
-	public static float PerlinNoise3D(float x, float y, float z)
-	{
-		float result = -1;
+		FastNoiseLite fastNoiseLite = new FastNoiseLite();
+		fastNoiseLite.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 
-		float ab = Mathf.PerlinNoise(x, y);
-		float bc = Mathf.PerlinNoise(y, z);
-		float ac = Mathf.PerlinNoise(x, z);
+		for (int i = 0; i < octaves; i++)
+		{
+			result += fastNoiseLite.GetNoise(position.x * frequency, position.y * frequency, position.z * frequency) * amplitude;
+			frequency *= 2f;
+			amplitude *= .5f;
+		}
 
-		float ba = Mathf.PerlinNoise(y, x);
-		float cb = Mathf.PerlinNoise(z, y);
-		float ca = Mathf.PerlinNoise(z, x);
-
-		result = (ab + bc + ac + ba + cb + ca) / 6f;
+		result += position.magnitude - radius;
 
 		return result;
 	}

@@ -6,8 +6,17 @@ public class PlanetEditor : Editor
 {
 	public override void OnInspectorGUI()
 	{
-		DrawDefaultInspector();
 		Planet planet = (Planet)target;
+
+		if (DrawDefaultInspector())
+		{
+			if (planet != null)
+			{
+				planet.DestroyPlanet();
+			}
+
+			planet.CreatePlanet();
+		}
 
 		if (GUILayout.Button("Create Planet"))
 		{

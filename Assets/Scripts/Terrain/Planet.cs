@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
-	public PlanetTerrainData TerrainData = new PlanetTerrainData();
+	[SerializeField] private PlanetTerrainData _terrainData = new PlanetTerrainData();
 
-	[SerializeField]
-	private Chunk chunkPrefab;
+	[SerializeField] private Chunk _chunkPrefab;
+
 	private Dictionary<Vector3, Chunk> _chunks = new Dictionary<Vector3, Chunk>();
+
+	public PlanetTerrainData TerrainData
+	{
+		get => _terrainData;
+	}
 
 	private void Start()
 	{
@@ -17,19 +22,19 @@ public class Planet : MonoBehaviour
 
 	public void CreatePlanet()
 	{
-		for (int y = -TerrainData.radiusInChunks; y < TerrainData.radiusInChunks; y++)
+		for (int y = -TerrainData.RadiusInChunks; y < TerrainData.RadiusInChunks; y++)
 		{
-			for (int x = -TerrainData.radiusInChunks; x < TerrainData.radiusInChunks; x++)
+			for (int x = -TerrainData.RadiusInChunks; x < TerrainData.RadiusInChunks; x++)
 			{
-				for (int z = -TerrainData.radiusInChunks; z < TerrainData.radiusInChunks; z++)
+				for (int z = -TerrainData.RadiusInChunks; z < TerrainData.RadiusInChunks; z++)
 				{
-					Vector3 bottomLeftPosition = new Vector3(x * TerrainData.chunkSize, y * TerrainData.chunkSize, z * TerrainData.chunkSize) + TerrainData.center;
+					Vector3 bottomLeftPosition = new Vector3(x * TerrainData.ChunkSize, y * TerrainData.ChunkSize, z * TerrainData.ChunkSize) + TerrainData.Center;
 
-					Chunk chunk = Instantiate(chunkPrefab);
+					Chunk chunk = Instantiate(_chunkPrefab);
 					chunk.Initialize(bottomLeftPosition, this);
 					chunk.CreateMesh();
 					chunk.transform.parent = transform;
-					chunk.gameObject.name = $"BottomLeft = {chunk.BottomLeftPosition},  Center = {chunk.CenterPosition}";
+					chunk.gameObject.name = $"BottomLeft = {chunk.BottomLeftPosition}";
 					_chunks.Add(bottomLeftPosition, chunk);
 				}
 			}

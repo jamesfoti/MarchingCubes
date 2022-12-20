@@ -5,7 +5,6 @@ using UnityEngine;
 public class Chunk : MonoBehaviour
 {
 	public Vector3 BottomLeftPosition { get; private set; } = new Vector3();
-	public Vector3 CenterPosition { get; private set; } = new Vector3();
 
 	private readonly List<Voxel> _voxels = new List<Voxel>();
 	private Planet _parentPlanet;
@@ -14,10 +13,10 @@ public class Chunk : MonoBehaviour
 	{
 		_parentPlanet = parentPlanet;
 
-		float voxelSize = 1f / _parentPlanet.TerrainData.chunkResolution;
-		int numberOfCellsInWidth = _parentPlanet.TerrainData.chunkSize * _parentPlanet.TerrainData.chunkResolution;
-		int numberOfCellsInHeight = _parentPlanet.TerrainData.chunkSize * _parentPlanet.TerrainData.chunkResolution;
-		int numberOfCellsInDepth = _parentPlanet.TerrainData.chunkSize * _parentPlanet.TerrainData.chunkResolution;
+		float voxelSize = 1f / _parentPlanet.TerrainData.ChunkResolution;
+		int numberOfCellsInWidth = _parentPlanet.TerrainData.ChunkSize * _parentPlanet.TerrainData.ChunkResolution;
+		int numberOfCellsInHeight = _parentPlanet.TerrainData.ChunkSize * _parentPlanet.TerrainData.ChunkResolution;
+		int numberOfCellsInDepth = _parentPlanet.TerrainData.ChunkSize * _parentPlanet.TerrainData.ChunkResolution;
 		
 		for (int y = 0; y < numberOfCellsInHeight; y++)
 		{
@@ -36,7 +35,7 @@ public class Chunk : MonoBehaviour
 	public void CreateMesh()
 	{
 		SetVoxelDensities();
-		Mesh mesh = MarchingCubesHelper.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.TerrainData.isoLevel);
+		Mesh mesh = MarchingCubesHelper.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.TerrainData.IsoLevel);
 		GetComponent<MeshFilter>().mesh = mesh;
 	}
 
@@ -60,7 +59,13 @@ public class Chunk : MonoBehaviour
 		{
 			for (int i = 0; i < voxel.Vertices.Length; i++)
 			{
-				voxel.Vertices[i].Density = NoiseHelper.PerlinNoise3D(voxel.Vertices[i].Position.x * _parentPlanet.TerrainData.noiseScale, voxel.Vertices[i].Position.y * _parentPlanet.TerrainData.noiseScale, voxel.Vertices[i].Position.z * _parentPlanet.TerrainData.noiseScale);
+				Vector3 position = voxel.Vertices[i].Position;
+
+				float radius = _parentPlanet.TerrainData.RadiusInChunks * _parentPlanet.TerrainData.ChunkSize;
+
+				float density = NoiseHelper.SdfProceduralPlanet(position, radius, _parentPlanet.TerrainData.Frequency, _parentPlanet.TerrainData.Amplitude, _parentPlanet.TerrainData.Octaves);
+
+				voxel.Vertices[i].Density = density;
 			}
 		}
 	}
@@ -72,7 +77,7 @@ public class Chunk : MonoBehaviour
 			for (int i = 0; i < voxel.Vertices.Length; i++)
 			{
 				Gizmos.color = Color.green;
-				Gizmos.DrawSphere(voxel.Vertices[i].Position, .05f);
+				//Gizmos.DrawSphere(voxel.Vertices[i].Position, .05f);
 
 				Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.Vertices[i].Density);
 				Gizmos.DrawWireSphere(voxel.Vertices[i].Position, .2f);
