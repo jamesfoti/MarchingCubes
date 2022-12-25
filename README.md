@@ -22,7 +22,7 @@ This project implements the Marching Cubes algorithm.
 
 ## Style Guide
 * `C# Coding Conventions`: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions. 
-* `BEST PRACTICES FOR ORGANIZING YOUR UNITY PROJECT` (this repo follows `Folder structure – example 1`):  https://github.com/thomasjacobsen-unity/Unity-Code-Style-Guide/blob/master/StyleExample.cs.
+* `Folder structure – example 1`: https://unity.com/how-to/organizing-your-project#folder-structure-example-1.
 
 ## References
 
