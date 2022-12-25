@@ -5,6 +5,7 @@ This project implements the Marching Cubes algorithm.
 ## Table of Contents  
 * [How to Set Up](#how-to-set-up)
 * [How to Start Up](#how-to-start-up)
+* [Style Guide](#style-guide)
 * [References](#references)
 
 ## How to Set Up
@@ -18,6 +19,10 @@ This project implements the Marching Cubes algorithm.
 
 1. Open up this repository which will launch a Unity Editor (easiest way to open is through Unity Hub).
 2. Click play and you can then start interacting with the demo: ![image](https://user-images.githubusercontent.com/47999916/202990127-fb22a676-d56b-4db8-b930-4d66c84f4957.png).
+
+## Style Guide
+* `C# Coding Conventions`: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions. 
+* `BEST PRACTICES FOR ORGANIZING YOUR UNITY PROJECT` (this repo follows `Folder structure – example 1`):  https://github.com/thomasjacobsen-unity/Unity-Code-Style-Guide/blob/master/StyleExample.cs.
 
 ## References
 
