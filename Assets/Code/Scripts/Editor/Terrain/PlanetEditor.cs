@@ -8,7 +8,7 @@ public class PlanetEditor : Editor
 	{
 		Planet planet = (Planet)target;
 
-		if (DrawDefaultInspector())
+		if (DrawDefaultInspector() && planet.IsAutoUpdate)
 		{
 			if (planet != null)
 			{
