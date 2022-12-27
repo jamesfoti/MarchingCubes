@@ -6,6 +6,7 @@ public class Planet : MonoBehaviour
 	[SerializeField] private Chunk _chunkPrefab;
 	[SerializeField] private NoiseData _noiseData;
 	[Range(-100f, 100f)] [SerializeField] private float _isoLevel = 0f;
+	[SerializeField] private InterpolationType _interpolationType = InterpolationType.None;
 	[Range(1, 100)] [SerializeField] private int _chunkResolution = 1;
 	[Range(1, 100)] [SerializeField] private int _chunkSize = 5;
 	[Range(1, 100)] [SerializeField] private int _radiusInChunks = 1;
@@ -21,6 +22,11 @@ public class Planet : MonoBehaviour
 	public float IsoLevel
 	{
 		get => _isoLevel;
+	}
+
+	public InterpolationType InterpolationType
+	{
+		get => _interpolationType;
 	}
 
 	public int ChunkResolution

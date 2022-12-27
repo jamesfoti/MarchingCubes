@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class MarchingCubesHelper
 {
-	private static readonly int[,] _edgeVertexTriangulationTable = new int[,] {
+	private static readonly int[,] _edgeTriangulationTable = new int[,] {
 		{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
 		{0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
 		{0, 1, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -262,7 +262,23 @@ public static class MarchingCubesHelper
 		{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
 	};
 
-	public static Mesh CreateMeshFromMarchingTheCubes(List<Voxel> voxels, float isoLevel)
+	private static readonly int[,] _edgeTable = new int[,]
+	{
+		{0, 1},
+		{1, 2},
+		{2, 3},
+		{3, 0},
+		{4, 5},
+		{5, 6},
+		{6, 7},
+		{7, 4},
+		{4, 0},
+		{5, 1},
+		{6, 2},
+		{7, 3},
+	};
+	
+	public static Mesh CreateMeshFromMarchingTheCubes(List<Voxel> voxels, float isoLevel, InterpolationType interpolationType = InterpolationType.None)
 	{
 		Mesh result = new Mesh();
 
@@ -273,7 +289,7 @@ public static class MarchingCubesHelper
 		{
 			int bindaryIndex = CalculateBinaryIndex(voxel, isoLevel);
 
-			int[] edgeIndices = GetIndicesFromEdgeVertexTriangulationTable(bindaryIndex);
+			int[] edgeIndices = GetEdgeIndicesFromBinaryIndex(bindaryIndex);
 
 			for (int i = 0; i < edgeIndices.Length; i += 3)
 			{
@@ -286,14 +302,37 @@ public static class MarchingCubesHelper
 				int edgeIndexB = edgeIndices[i + 1];
 				int edgeIndexC = edgeIndices[i + 2];
 
-				Vector3 vertexA = (voxel.Edges[edgeIndexA].Start.Position + voxel.Edges[edgeIndexA].End.Position) / 2f;
-				Vector3 vertexB = (voxel.Edges[edgeIndexB].Start.Position + voxel.Edges[edgeIndexB].End.Position) / 2f;
-				Vector3 vertexC = (voxel.Edges[edgeIndexC].Start.Position + voxel.Edges[edgeIndexC].End.Position) / 2f;
+				VoxelEdge voxelEdgeA = GetVoxelEdgeFromEdgeIndex(voxel, edgeIndexA);
+				VoxelEdge voxelEdgeB = GetVoxelEdgeFromEdgeIndex(voxel, edgeIndexB);
+				VoxelEdge voxelEdgeC = GetVoxelEdgeFromEdgeIndex(voxel, edgeIndexC);
+
+				Vector3 vertexOnEdgeA;
+				Vector3 vertexOnEdgeB;
+				Vector3 vertexOnEdgeC;
+
+				if (interpolationType == InterpolationType.Linear)
+				{
+					vertexOnEdgeA = LinearInterpolate(voxelEdgeA.Start, voxelEdgeA.End, isoLevel);
+					vertexOnEdgeB = LinearInterpolate(voxelEdgeB.Start, voxelEdgeB.End, isoLevel);
+					vertexOnEdgeC = LinearInterpolate(voxelEdgeC.Start, voxelEdgeC.End, isoLevel);
+				}
+				else if (interpolationType == InterpolationType.Cosine)
+				{
+					vertexOnEdgeA = CosineInterpolate(voxelEdgeA.Start, voxelEdgeA.End, isoLevel);
+					vertexOnEdgeB = CosineInterpolate(voxelEdgeB.Start, voxelEdgeB.End, isoLevel);
+					vertexOnEdgeC = CosineInterpolate(voxelEdgeC.Start, voxelEdgeC.End, isoLevel);
+				}
+				else
+				{
+					vertexOnEdgeA = (voxelEdgeA.Start.Position + voxelEdgeA.End.Position) / 2f;
+					vertexOnEdgeB = (voxelEdgeB.Start.Position + voxelEdgeB.End.Position) / 2f;
+					vertexOnEdgeC = (voxelEdgeC.Start.Position + voxelEdgeC.End.Position) / 2f;
+				}
 
 				int vertexIndex = vertices.Count;
-				vertices.Add(vertexA);
-				vertices.Add(vertexB);
-				vertices.Add(vertexC);
+				vertices.Add(vertexOnEdgeA);
+				vertices.Add(vertexOnEdgeB);
+				vertices.Add(vertexOnEdgeC);
 				triangles.Add(vertexIndex);
 				triangles.Add(vertexIndex + 1);
 				triangles.Add(vertexIndex + 2);
@@ -312,42 +351,42 @@ public static class MarchingCubesHelper
 	{
 		int result = 0;
 
-		if (voxel.Vertices[0].Density > isoLevel)
+		if (voxel.VoxelVertices[0].Density > isoLevel)
 		{
 			result += 1;
 		}
 
-		if (voxel.Vertices[1].Density > isoLevel)
+		if (voxel.VoxelVertices[1].Density > isoLevel)
 		{
 			result += 2;
 		}
 
-		if (voxel.Vertices[2].Density > isoLevel)
+		if (voxel.VoxelVertices[2].Density > isoLevel)
 		{
 			result += 4;
 		}
 
-		if (voxel.Vertices[3].Density > isoLevel)
+		if (voxel.VoxelVertices[3].Density > isoLevel)
 		{
 			result += 8;
 		}
 
-		if (voxel.Vertices[4].Density > isoLevel)
+		if (voxel.VoxelVertices[4].Density > isoLevel)
 		{
 			result += 16;
 		}
 
-		if (voxel.Vertices[5].Density > isoLevel)
+		if (voxel.VoxelVertices[5].Density > isoLevel)
 		{
 			result += 32;
 		}
 
-		if (voxel.Vertices[6].Density > isoLevel)
+		if (voxel.VoxelVertices[6].Density > isoLevel)
 		{
 			result += 64;
 		}
 
-		if (voxel.Vertices[7].Density > isoLevel)
+		if (voxel.VoxelVertices[7].Density > isoLevel)
 		{
 			result += 128;
 		}
@@ -355,19 +394,91 @@ public static class MarchingCubesHelper
 		return result;
 	}
 
-	private static int[] GetIndicesFromEdgeVertexTriangulationTable(int bindaryIndex)
+	private static int[] GetEdgeIndicesFromBinaryIndex(int bindaryIndex)
 	{
 		int[] result;
 
-		int maxNumberOfVertexTriangulationIndices = _edgeVertexTriangulationTable.GetLength(1);
+		int maxNumberOfVertexTriangulationIndices = _edgeTriangulationTable.GetLength(1);
 
 		result = new int[maxNumberOfVertexTriangulationIndices];
 
 		for (int i = 0; i < maxNumberOfVertexTriangulationIndices; i++)
 		{
-			result[i] = _edgeVertexTriangulationTable[bindaryIndex, i];
+			result[i] = _edgeTriangulationTable[bindaryIndex, i];
 		}
 
 		return result;
 	}
+
+	private static VoxelEdge GetVoxelEdgeFromEdgeIndex(Voxel voxel, int edgeIndex)
+	{
+		VoxelEdge result;
+
+		int startIndex = _edgeTable[edgeIndex, 0];
+		int endIndex = _edgeTable[edgeIndex, 1];
+
+		VoxelVertex startVoxelVertex = voxel.VoxelVertices[startIndex];
+		VoxelVertex endVoxelVertex = voxel.VoxelVertices[endIndex];
+
+		result = new VoxelEdge(startVoxelVertex, endVoxelVertex);
+		return result;
+	}
+
+	private static Vector3 LinearInterpolate(VoxelVertex voxelVertexA, VoxelVertex voxelVertexB, float isoLevel)
+	{
+		Vector3 result = Vector3.zero;
+
+		if (Mathf.Approximately(isoLevel - voxelVertexA.Density, 0))
+		{
+			result = voxelVertexA.Position;
+		}
+		else if (Mathf.Approximately(isoLevel - voxelVertexB.Density, 0))
+		{
+			result = voxelVertexB.Position;
+		}
+		else if (Mathf.Approximately(voxelVertexA.Density - voxelVertexB.Density, 0))
+		{
+			result = voxelVertexA.Position;
+		}
+		else
+		{
+			float t = (isoLevel - voxelVertexA.Density) / (voxelVertexB.Density - voxelVertexA.Density);
+			result = voxelVertexA.Position + t * (voxelVertexB.Position - voxelVertexA.Position);
+		}
+
+		return result;
+	}
+
+	private static Vector3 CosineInterpolate(VoxelVertex voxelVertexA, VoxelVertex voxelVertexB, float isoLevel)
+	{
+		Vector3 result = Vector3.zero;
+
+		if (Mathf.Approximately(isoLevel - voxelVertexA.Density, 0))
+		{
+			result = voxelVertexA.Position;
+		}
+		else if (Mathf.Approximately(isoLevel - voxelVertexB.Density, 0))
+		{
+			result = voxelVertexB.Position;
+		}
+		else if (Mathf.Approximately(voxelVertexA.Density - voxelVertexB.Density, 0))
+		{
+			result = voxelVertexA.Position;
+		}
+		else
+		{
+			float frequency = (isoLevel - voxelVertexA.Density) / (voxelVertexB.Density - voxelVertexA.Density);
+			float t = (1f - Mathf.Cos(frequency * Mathf.PI)) / 2f;
+			result = (voxelVertexA.Position * (1 - t) + voxelVertexB.Position * t);
+		}
+
+		return result;
+	}
+}
+
+public enum InterpolationType
+{
+	None,
+	Linear,
+	Cosine
 }

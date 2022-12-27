@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b2bc4ebc1132784299a5896411d085f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 50
+  DragSpeed: 10
   RotationSpeed: 500
 --- !u!1 &677435630
 GameObject:
@@ -716,6 +716,7 @@ MonoBehaviour:
   _offDensityValue: 0
   _onDensityValue: 1
   _isoLevel: 0.5
+  _isInterpolated: 1
 --- !u!1 &1065742184
 GameObject:
   m_ObjectHideFlags: 0

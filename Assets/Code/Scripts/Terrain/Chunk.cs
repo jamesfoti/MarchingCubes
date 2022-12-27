@@ -33,7 +33,7 @@ public class Chunk : MonoBehaviour
 	public void CreateMesh()
 	{
 		SetVoxelDensities();
-		Mesh mesh = MarchingCubesHelper.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.IsoLevel);
+		Mesh mesh = MarchingCubesHelper.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.IsoLevel, _parentPlanet.InterpolationType);
 		GetComponent<MeshFilter>().mesh = mesh;
 	}
 
@@ -69,9 +69,9 @@ public class Chunk : MonoBehaviour
 
 		foreach (Voxel voxel in _voxels)
 		{
-			for (int i = 0; i < voxel.Vertices.Length; i++)
+			for (int i = 0; i < voxel.VoxelVertices.Length; i++)
 			{
-				Vector3 position = voxel.Vertices[i].Position;
+				Vector3 position = voxel.VoxelVertices[i].Position;
 				
 				float xSample = position.x + offset.x;
 				float ySample = position.y + offset.y;
@@ -79,7 +79,7 @@ public class Chunk : MonoBehaviour
 
 				float noise = fastNoiseLite.GetNoise(xSample, ySample, zSample);
 
-				voxel.Vertices[i].Density = position.magnitude - radius + (noiseScale * noise);
+				voxel.VoxelVertices[i].Density = position.magnitude - radius + (noiseScale * noise);
 			}
 		}
 	}
@@ -88,11 +88,11 @@ public class Chunk : MonoBehaviour
 	{
 		foreach (Voxel voxel in _voxels)
 		{
-			for (int i = 0; i < voxel.Vertices.Length; i++)
+			for (int i = 0; i < voxel.VoxelVertices.Length; i++)
 			{
-				Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.Vertices[i].Density);
-				Gizmos.DrawWireSphere(voxel.Vertices[i].Position, .2f);
-				Handles.Label(voxel.Vertices[i].Position, voxel.Vertices[i].Density.ToString());
+				Gizmos.color = Color.Lerp(Color.white, Color.black, voxel.VoxelVertices[i].Density);
+				Gizmos.DrawWireSphere(voxel.VoxelVertices[i].Position, .2f);
+				Handles.Label(voxel.VoxelVertices[i].Position, voxel.VoxelVertices[i].Density.ToString());
 			}
 		}
 	}
