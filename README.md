@@ -27,6 +27,8 @@ This project implements the Marching Cubes algorithm.
 ## References
 
 * MARCHING CUBES: A HIGH RESOLUTION 3D SURFACE CONSTRUCTION ALGORITHM by William E. Lorensen and Harvey E.Cline: https://people.eecs.berkeley.edu/~sequin/CS285/PAPERS/Lorensen_Cline.pdf.
+* Polygonising a scalar field by Paule Bourke: http://paulbourke.net/geometry/polygonise/.
+* Interpolation methods by Paul Bourke: http://paulbourke.net/miscellaneous/interpolation/.
 * Visualization Class 9.2. The Marching Cubes Algorithm Part I by Bob Laramee: https://youtu.be/5g7sL1RUu1I. 
 * Visualization Class 10.1. The Marching Cubes Algorithm Part II by Bob Laramee: https://youtu.be/fstxQiZeKJ8.
 * "I'm rotating an object on two axes, so why does it keep twisting around the third axis?" Gamedev Stack Exchange Discussion: https://gamedev.stackexchange.com/questions/136174/im-rotating-an-object-on-two-axes-so-why-does-it-keep-twisting-around-the-thir/136175#136175.
