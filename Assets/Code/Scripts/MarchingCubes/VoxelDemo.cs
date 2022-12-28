@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class VoxelDemo : MonoBehaviour
@@ -10,20 +8,14 @@ public class VoxelDemo : MonoBehaviour
 	[SerializeField] private float _offDensityValue = 0f;
 	[SerializeField] private float _onDensityValue = 1f;
 	[SerializeField] private float _isoLevel = .5f;
-	[SerializeField] private InterpolationType _interpolationType = InterpolationType.None;
+	[SerializeField] private MarchingCubes.InterpolationType _interpolationType = MarchingCubes.InterpolationType.None;
 	private Voxel _voxel;
 	private float _voxelSize = 1f;
 	private int _numberOfVerticesInVoxel = 8;
 	
 	private void Start()
 	{
-		Vector3 centerPosition = transform.position;
-
-		float halfVoxelSize = _voxelSize * .5f;
-
-		Vector3 bottomLeftVertex = new Vector3(centerPosition.x - _voxelSize * halfVoxelSize, centerPosition.y - _voxelSize * halfVoxelSize, centerPosition.z - halfVoxelSize);
-		
-		_voxel = new Voxel(bottomLeftVertex, _voxelSize);
+		_voxel = new Voxel(transform.position, _voxelSize);
 
 		for (int i = 0; i < _numberOfVerticesInVoxel; i++)
 		{
@@ -34,10 +26,10 @@ public class VoxelDemo : MonoBehaviour
 
 	private void Update()
 	{
-		DetectObjectClick();
+		HandleVoxelVertexClick();
 	}
 
-	private void DetectObjectClick()
+	private void HandleVoxelVertexClick()
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
@@ -94,6 +86,7 @@ public class VoxelDemo : MonoBehaviour
 
 	private void CreateMesh()
 	{
-		GetComponent<MeshFilter>().mesh = MarchingCubesHelper.CreateMeshFromMarchingTheCubes(new List<Voxel>() { _voxel }, _isoLevel, _interpolationType);
+		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(new List<Voxel>() { _voxel }, _isoLevel, _interpolationType);
+		GetComponent<MeshFilter>().mesh = mesh;
 	}
 }

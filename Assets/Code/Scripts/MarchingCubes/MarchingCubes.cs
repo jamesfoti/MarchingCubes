@@ -1,8 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class MarchingCubesHelper
+public static class MarchingCubes
 {
+	public enum InterpolationType
+	{
+		None,
+		Linear,
+		Cosine
+	}
+
 	private static readonly int[,] _edgeTriangulationTable = new int[,] {
 		{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
 		{0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -277,7 +284,7 @@ public static class MarchingCubesHelper
 		{6, 2},
 		{7, 3},
 	};
-	
+
 	public static Mesh CreateMeshFromMarchingTheCubes(List<Voxel> voxels, float isoLevel, InterpolationType interpolationType = InterpolationType.None)
 	{
 		Mesh result = new Mesh();
@@ -474,11 +481,4 @@ public static class MarchingCubesHelper
 
 		return result;
 	}
-}
-
-public enum InterpolationType
-{
-	None,
-	Linear,
-	Cosine
 }

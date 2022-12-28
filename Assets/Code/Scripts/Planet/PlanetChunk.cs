@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Chunk : MonoBehaviour
+public class PlanetChunk : MonoBehaviour
 {
 	private readonly List<Voxel> _voxels = new List<Voxel>();
 	private Planet _parentPlanet;
@@ -33,7 +33,7 @@ public class Chunk : MonoBehaviour
 	public void CreateMesh()
 	{
 		SetVoxelDensities();
-		Mesh mesh = MarchingCubesHelper.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.IsoLevel, _parentPlanet.InterpolationType);
+		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.IsoLevel, _parentPlanet.InterpolationType);
 		GetComponent<MeshFilter>().mesh = mesh;
 	}
 
@@ -53,18 +53,8 @@ public class Chunk : MonoBehaviour
 
 	private void SetVoxelDensities()
 	{
-		FastNoiseLite fastNoiseLite = new FastNoiseLite();
-		fastNoiseLite.SetNoiseType(_parentPlanet.NoiseData.NoiseType);
-		fastNoiseLite.SetFractalType(_parentPlanet.NoiseData.FractalType);
-		fastNoiseLite.SetSeed(_parentPlanet.NoiseData.Seed);
-		fastNoiseLite.SetFrequency(_parentPlanet.NoiseData.Frequency);
-		fastNoiseLite.SetFractalOctaves(_parentPlanet.NoiseData.Octaves);
-		fastNoiseLite.SetFractalLacunarity(_parentPlanet.NoiseData.Lacunarity);
-		fastNoiseLite.SetFractalGain(_parentPlanet.NoiseData.Gain);
-		fastNoiseLite.SetFractalWeightedStrength(_parentPlanet.NoiseData.WeightedStrength);
-
-		Vector3 offset = _parentPlanet.NoiseData.Offset;
-		float noiseScale = _parentPlanet.NoiseData.NoiseScale;
+		Vector3 offset = _parentPlanet.Offset;
+		float noiseScale = _parentPlanet.NoiseScale;
 		float radius = _parentPlanet.RadiusInRealWorld;
 
 		foreach (Voxel voxel in _voxels)
@@ -77,7 +67,7 @@ public class Chunk : MonoBehaviour
 				float ySample = position.y + offset.y;
 				float zSample = position.z + offset.z;
 
-				float noise = fastNoiseLite.GetNoise(xSample, ySample, zSample);
+				float noise = _parentPlanet.FastNoiseLite.GetNoise(xSample, ySample, zSample);
 
 				voxel.VoxelVertices[i].Density = position.magnitude - radius + (noiseScale * noise);
 			}
