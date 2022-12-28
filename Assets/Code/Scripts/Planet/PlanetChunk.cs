@@ -11,10 +11,10 @@ public class PlanetChunk : MonoBehaviour
 	{
 		_parentPlanet = parentPlanet;
 
-		float voxelSize = 1f / _parentPlanet.ChunkResolution;
-		int numberOfCellsInWidth = _parentPlanet.ChunkSize * _parentPlanet.ChunkResolution;
-		int numberOfCellsInHeight = _parentPlanet.ChunkSize * _parentPlanet.ChunkResolution;
-		int numberOfCellsInDepth = _parentPlanet.ChunkSize * _parentPlanet.ChunkResolution;
+		float voxelSize = 1f / _parentPlanet.PlanetShapeSettings.ChunkResolution;
+		int numberOfCellsInWidth = _parentPlanet.PlanetShapeSettings.ChunkSize * _parentPlanet.PlanetShapeSettings.ChunkResolution;
+		int numberOfCellsInHeight = _parentPlanet.PlanetShapeSettings.ChunkSize * _parentPlanet.PlanetShapeSettings.ChunkResolution;
+		int numberOfCellsInDepth = _parentPlanet.PlanetShapeSettings.ChunkSize * _parentPlanet.PlanetShapeSettings.ChunkResolution;
 		
 		for (int y = 0; y < numberOfCellsInHeight; y++)
 		{
@@ -33,7 +33,7 @@ public class PlanetChunk : MonoBehaviour
 	public void CreateMesh()
 	{
 		SetVoxelDensities();
-		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.IsoLevel, _parentPlanet.InterpolationType);
+		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.PlanetShapeSettings.IsoLevel, _parentPlanet.PlanetShapeSettings.InterpolationType);
 		GetComponent<MeshFilter>().mesh = mesh;
 	}
 
@@ -53,23 +53,19 @@ public class PlanetChunk : MonoBehaviour
 
 	private void SetVoxelDensities()
 	{
-		Vector3 offset = _parentPlanet.Offset;
-		float noiseScale = _parentPlanet.NoiseScale;
-		float radius = _parentPlanet.RadiusInRealWorld;
-
 		foreach (Voxel voxel in _voxels)
 		{
 			for (int i = 0; i < voxel.VoxelVertices.Length; i++)
 			{
 				Vector3 position = voxel.VoxelVertices[i].Position;
 				
-				float xSample = position.x + offset.x;
-				float ySample = position.y + offset.y;
-				float zSample = position.z + offset.z;
+				float xSample = position.x + _parentPlanet.NoiseSettings.Offset.x;
+				float ySample = position.y + _parentPlanet.NoiseSettings.Offset.y;
+				float zSample = position.z + _parentPlanet.NoiseSettings.Offset.z;
 
 				float noise = _parentPlanet.FastNoiseLite.GetNoise(xSample, ySample, zSample);
 
-				voxel.VoxelVertices[i].Density = position.magnitude - radius + (noiseScale * noise);
+				voxel.VoxelVertices[i].Density = position.magnitude - _parentPlanet.PlanetShapeSettings.RadiusInRealWorld + (_parentPlanet.NoiseSettings.NoiseScale * noise);
 			}
 		}
 	}
