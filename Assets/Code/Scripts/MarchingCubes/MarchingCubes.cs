@@ -285,7 +285,7 @@ public static class MarchingCubes
 		{7, 3},
 	};
 
-	public static Mesh CreateMeshFromMarchingTheCubes(List<Voxel> voxels, float isoLevel, InterpolationType interpolationType = InterpolationType.None)
+	public static Mesh CreateMeshFromMarchingTheCubes(List<Voxel> voxels, float isoLevel, InterpolationType interpolationType = InterpolationType.None, bool isFlatShaded = true)
 	{
 		Mesh result = new Mesh();
 
@@ -336,13 +336,19 @@ public static class MarchingCubes
 					vertexOnEdgeC = (voxelEdgeC.Start.Position + voxelEdgeC.End.Position) / 2f;
 				}
 
-				int vertexIndex = vertices.Count;
-				vertices.Add(vertexOnEdgeA);
-				vertices.Add(vertexOnEdgeB);
-				vertices.Add(vertexOnEdgeC);
-				triangles.Add(vertexIndex);
-				triangles.Add(vertexIndex + 1);
-				triangles.Add(vertexIndex + 2);
+				if (isFlatShaded)
+				{
+					ApplyFlatShading(vertexOnEdgeA, ref vertices, ref triangles);
+					ApplyFlatShading(vertexOnEdgeB, ref vertices, ref triangles);
+					ApplyFlatShading(vertexOnEdgeC, ref vertices, ref triangles);
+				} 
+				else
+				{
+					ApplyNonFlatShading(vertexOnEdgeA, ref vertices, ref triangles);
+					ApplyNonFlatShading(vertexOnEdgeB, ref vertices, ref triangles);
+					ApplyNonFlatShading(vertexOnEdgeC, ref vertices, ref triangles);
+				}
+				
 			}
 		}
 
@@ -480,5 +486,30 @@ public static class MarchingCubes
 		}
 
 		return result;
+	}
+
+	private static void ApplyFlatShading(Vector3 vertex, ref List<Vector3> vertices, ref List<int> triangles)
+	{
+		vertices.Add(vertex);
+		triangles.Add(vertices.Count - 1);
+	}
+
+	private static void ApplyNonFlatShading(Vector3 vertex, ref List<Vector3> vertices, ref List<int> triangles)
+	{
+		bool isVertexAlreadyFound = false;
+		for (int i = 0; i < vertices.Count; i++)
+		{
+			if (vertices[i] == vertex)
+			{
+				triangles.Add(i);
+				isVertexAlreadyFound = true;
+			}
+		}
+
+		if (!isVertexAlreadyFound)
+		{
+			vertices.Add(vertex);
+			triangles.Add(vertices.Count - 1);
+		}
 	}
 }

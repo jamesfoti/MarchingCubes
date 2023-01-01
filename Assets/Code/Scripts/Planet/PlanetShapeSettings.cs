@@ -7,6 +7,7 @@ public class PlanetShapeSettings
 	[SerializeField] private PlanetChunk _planetChunkPrefab;
 	[Range(-100f, 100f)] [SerializeField] private float _isoLevel = 0f;
 	[SerializeField] private MarchingCubes.InterpolationType _interpolationType = MarchingCubes.InterpolationType.None;
+	[SerializeField] private bool _isFlatShaded = true;
 	[Range(1, 100)] [SerializeField] private int _chunkResolution = 1;
 	[Range(1, 100)] [SerializeField] private int _chunkSize = 5;
 	[Range(1, 100)] [SerializeField] private int _radiusInChunks = 1;
@@ -24,6 +25,11 @@ public class PlanetShapeSettings
 	public MarchingCubes.InterpolationType InterpolationType
 	{
 		get => _interpolationType;
+	}
+
+	public bool IsFlatShaded
+	{
+		get => _isFlatShaded;
 	}
 
 	public int ChunkResolution

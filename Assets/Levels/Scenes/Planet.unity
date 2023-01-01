@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25238700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -179.1}
+  m_LocalPosition: {x: 0, y: 0, z: -34.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -266,22 +266,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5871947971bb11f4d870ccca1d2797d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _noiseType: 0
-  _fractalType: 0
-  _seed: 0
-  _frequency: 0.02
-  _lacunarity: 2
-  _octaves: 3
-  _gain: 0.5
-  _weightedStrength: 0
-  _noiseScale: 1
-  _offset: {x: 0, y: 0, z: 0}
-  _planetChunkPrefab: {fileID: 3406029699930358095, guid: ef429d405a7edb5469e40782b505d700, type: 3}
-  _isoLevel: 0
-  _interpolationType: 0
-  _chunkResolution: 1
-  _chunkSize: 5
-  _radiusInChunks: 2
+  _noiseSettings:
+    _noiseType: 0
+    _fractalType: 0
+    _seed: 0
+    _frequency: 0.104
+    _lacunarity: 2
+    _octaves: 3
+    _gain: 0.5
+    _weightedStrength: 0
+    _noiseScale: 1
+    _offset: {x: 0, y: 0, z: 0}
+  _planetShapeSettings:
+    _planetChunkPrefab: {fileID: 3406029699930358095, guid: ef429d405a7edb5469e40782b505d700, type: 3}
+    _isoLevel: -0.7
+    _interpolationType: 0
+    _isFlatShaded: 1
+    _chunkResolution: 1
+    _chunkSize: 9
+    _radiusInChunks: 1
   _isAutoUpdate: 1
 --- !u!1 &1713271199
 GameObject:

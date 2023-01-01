@@ -33,7 +33,7 @@ public class PlanetChunk : MonoBehaviour
 	public void CreateMesh()
 	{
 		SetVoxelDensities();
-		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.PlanetShapeSettings.IsoLevel, _parentPlanet.PlanetShapeSettings.InterpolationType);
+		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(_voxels, _parentPlanet.PlanetShapeSettings.IsoLevel, _parentPlanet.PlanetShapeSettings.InterpolationType, _parentPlanet.PlanetShapeSettings.IsFlatShaded);
 		GetComponent<MeshFilter>().mesh = mesh;
 	}
 
