@@ -268,7 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _noiseSettings:
     _noiseType: 0
-    _fractalType: 0
+    _fractalType: 1
     _seed: 0
     _frequency: 0.104
     _lacunarity: 2

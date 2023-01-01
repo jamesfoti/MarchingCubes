@@ -9,6 +9,7 @@ public class VoxelDemo : MonoBehaviour
 	[SerializeField] private float _onDensityValue = 1f;
 	[SerializeField] private float _isoLevel = .5f;
 	[SerializeField] private MarchingCubes.InterpolationType _interpolationType = MarchingCubes.InterpolationType.None;
+	[SerializeField] private bool _isFlatShaded = true;
 	private Voxel _voxel;
 	private float _voxelSize = 1f;
 	private int _numberOfVerticesInVoxel = 8;
@@ -86,7 +87,7 @@ public class VoxelDemo : MonoBehaviour
 
 	private void CreateMesh()
 	{
-		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(new List<Voxel>() { _voxel }, _isoLevel, _interpolationType);
+		Mesh mesh = MarchingCubes.CreateMeshFromMarchingTheCubes(new List<Voxel>() { _voxel }, _isoLevel, _interpolationType, _isFlatShaded);
 		GetComponent<MeshFilter>().mesh = mesh;
 	}
 }

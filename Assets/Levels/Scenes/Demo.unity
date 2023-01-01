@@ -717,6 +717,7 @@ MonoBehaviour:
   _onDensityValue: 1
   _isoLevel: 0.5
   _interpolationType: 0
+  _isFlatShaded: 1
 --- !u!1 &1065742184
 GameObject:
   m_ObjectHideFlags: 0
