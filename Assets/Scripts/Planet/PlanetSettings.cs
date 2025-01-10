@@ -19,7 +19,11 @@ public class PlanetSettings
 	[Range(1, 10)][SerializeField] private int _octaves = 3;
 	[Range(-10f, 10f)][SerializeField] private float _fractalGain = .5f;
 	[Range(0f, 1f)][SerializeField] private float _fractalWeightedStrength = 0f;
-	[Range(1f, 100f)][SerializeField] private float _noiseScale = 1f;
+	[Range(0f, 100f)][SerializeField] private float _noiseScale = 1f;
+	[Range(1f, 100f)][SerializeField] private int _fallOffValueA = 1;
+	[Range(1f, 100f)][SerializeField] private float _fallOffValueB = 1f;
+	[Range(-1f, 1f)][SerializeField] private float _caveThreshold = 1f;
+
 	[SerializeField] private Vector3 _offset = Vector3.zero;
 
 	public PlanetChunk PlanetChunkPrefab
