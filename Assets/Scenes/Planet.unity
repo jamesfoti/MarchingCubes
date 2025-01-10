@@ -210,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 25238700}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -34.76}
+  m_LocalPosition: {x: 0, y: 0, z: -79.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -274,28 +274,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5871947971bb11f4d870ccca1d2797d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _noiseSettings:
-    _noiseType: 2
-    _fractalType: 1
-    _seed: 21
-    _frequency: 0.032
-    _lacunarity: 2
-    _octaves: 3
-    _fractalGain: 0.5
-    _fractalWeightedStrength: 0
-    _noiseScale: 10
-    _offset: {x: 0, y: 0, z: 0}
-    _shouldGenerateCaves: 0
-    _caveThreshold: -0.65
-  _planetShapeSettings:
+  _planetSettings:
     _planetChunkPrefab: {fileID: 3406029699930358095, guid: ef429d405a7edb5469e40782b505d700, type: 3}
-    _isoLevel: 6
+    _isoLevel: 0.98
     _interpolationType: 1
     _isFlatShaded: 1
     _chunkResolution: 1
-    _chunkSize: 5
+    _chunkSize: 10
     _radiusInChunks: 2
-  _isAutoUpdate: 1
+    _noiseType: 0
+    _fractalType: 1
+    _seed: 0
+    _frequency: 0.02
+    _lacunarity: 2
+    _octaves: 3
+    _fractalGain: 0.5
+    _fractalWeightedStrength: 0.36
+    _noiseScale: 1
+    _fallOffValueA: 1
+    _fallOffValueB: 34.6
+    _caveThreshold: -0.33
+    _offset: {x: 0, y: 0, z: 0}
+  _isAutoUpdate: 0
 --- !u!1 &1713271199
 GameObject:
   m_ObjectHideFlags: 0

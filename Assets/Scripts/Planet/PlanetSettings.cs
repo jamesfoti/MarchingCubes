@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlanetSettings
 {
 	[SerializeField] private PlanetChunk _planetChunkPrefab;
-	[Range(-100f, 100f)] [SerializeField] private float _isoLevel = 0f;
+	[Range(-1f, 1f)] [SerializeField] private float _isoLevel = 0f;
 	[SerializeField] private MarchingCubes.InterpolationType _interpolationType = MarchingCubes.InterpolationType.None;
 	[SerializeField] private bool _isFlatShaded = true;
 	[Range(1, 100)] [SerializeField] private int _chunkResolution = 1;
@@ -114,5 +114,20 @@ public class PlanetSettings
 	public Vector3 Offset
 	{
 		get => _offset;
+	}
+
+	public int FallOffValueA
+	{
+		get => _fallOffValueA;
+	}
+
+	public float FallOffValueB
+	{
+		get => _fallOffValueB;
+	}
+
+	public float CaveThreshold
+	{
+		get => _caveThreshold;
 	}
 }

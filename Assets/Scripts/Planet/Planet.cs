@@ -17,6 +17,11 @@ public class Planet : MonoBehaviour
 		get => _isAutoUpdate;
 	}
 
+	public Dictionary<Vector3, PlanetChunk> PlanetChunks
+	{
+		get => _planetChunks;
+	}
+
 	public FastNoiseLite FastNoiseLite { get; private set; } = new FastNoiseLite();
 
 	private void Start()
